@@ -150,15 +150,20 @@ public class JobThread extends Thread{
 							futureThread = new Thread(futureTask);
 							futureThread.start();
 
+							// 这里设置超时参数实现了 超时时间设置的功能
 							Boolean tempResult = futureTask.get(triggerParam.getExecutorTimeout(), TimeUnit.SECONDS);
-						} catch (TimeoutException e) {
+						}
+						// 超时触发
+						catch (TimeoutException e) {
 
 							XxlJobHelper.log("<br>----------- xxl-job job execute timeout");
 							XxlJobHelper.log(e);
 
 							// handle result
 							XxlJobHelper.handleTimeout("job execute timeout ");
-						} finally {
+						}
+						// 临时线程，使用完就销毁
+						finally {
 							futureThread.interrupt();
 						}
 					} else {
